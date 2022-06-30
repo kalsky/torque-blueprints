@@ -1,5 +1,5 @@
 spec_version: 2
-description: Write some content to an existing s3 bucket
+description: Write content to an existing s3 bucket
 
 inputs:
   bucket_name:
