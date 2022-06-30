@@ -20,7 +20,7 @@ jobs:
       with:
         format: 'csv'
     - name: Torque validate blueprints
-      uses: QualiTorque/torque-validate-bp-action@v0.0.3
+      uses: QualiTorque/torque-validate-bp-action@c9a9345ea328317e66b197e3336dc89383092ca2
       with:
         space: Yaniv
         files_list: ${{ steps.files.outputs.added_modified  }}
