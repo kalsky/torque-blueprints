@@ -1,0 +1,28 @@
+name: Validate
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Get changed files
+      id: files
+      uses: jitterbit/get-changed-files@v1
+      with:
+        format: 'csv'
+    - name: Torque validate blueprints
+      uses: QualiTorque/torque-validate-bp-action@v0.0.3
+      with:
+        space: Yaniv
+        files_list: ${{ steps.files.outputs.added_modified  }}
+        torque_token: ${{ secrets.TORQUE_TOKEN }}
+  
