@@ -2,7 +2,7 @@ spec_version: 2
 description: Write content to an existing s3 bucket
 
 inputs:
-  bucket_name:
+  bucket_name2:
     type: string
     display-style: normal
     default: shiras-bucket
