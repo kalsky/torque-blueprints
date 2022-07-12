@@ -24,6 +24,6 @@ grains:
       host:
         name: '{{.inputs.host}}'
       inputs:
-        - BUCKET_NAME: '{{.inputs.bucket name}}'
+        - BUCKET_NAME: '{{.inputs.bucket name -}}'
         - SANDBOX_ID: '{{sandboxId}}'
         - CONTENT: '{{.inputs.content}}'
