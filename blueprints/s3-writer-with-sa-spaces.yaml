@@ -10,22 +10,19 @@ inputs:
     type: string
     default: this is a default content
     display-style: normal
-  host:
+  host name:
     type: string
     default: shira-eks
     display-style: normal
-  tf path:
-    type: string
-    default: github.com/shirabendor-quali/terraform/s3-write
 
 grains:
   s3-write:
     kind: terraform
     spec:
       source:
-        path: '{{".inputs.tf path"}}'
+        path: github.com/shirabendor-quali/terraform/s3-write
       host:
-        name: '{{.inputs.host}}'
+        name: '{{".inputs.host name"}}'
       inputs:
         - BUCKET_NAME: '{{.inputs.bucket_name}}'
         - SANDBOX_ID: '{{sandboxId}}'
