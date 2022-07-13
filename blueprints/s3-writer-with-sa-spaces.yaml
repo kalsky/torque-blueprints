@@ -2,7 +2,7 @@ spec_version: 2
 description: Write content to an existing s3 bucket
 
 inputs:
-  bucket name:
+  bucket_name:
     type: string
     display-style: normal
     default: shiras-bucket
@@ -14,16 +14,19 @@ inputs:
     type: string
     default: shira-eks
     display-style: normal
+  tf path:
+    type: string
+    default: github.com/shirabendor-quali/terraform/s3-write
 
 grains:
   s3-write:
     kind: terraform
     spec:
       source:
-        path: github.com/shirabendor-quali/terraform/s3-write
+        path: '{{".inputs.tf path"}}'
       host:
         name: '{{.inputs.host}}'
       inputs:
-        - BUCKET_NAME: '{{".inputs.bucket name"}}'
+        - BUCKET_NAME: '{{.inputs.bucket_name}}'
         - SANDBOX_ID: '{{sandboxId}}'
         - CONTENT: '{{.inputs.content}}'
