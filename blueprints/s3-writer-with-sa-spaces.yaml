@@ -22,7 +22,7 @@ grains:
       source:
         path: github.com/shirabendor-quali/terraform/s3-write
       host:
-        name: '{{".inputs.host name"}}'
+        name: '{{.inputs.["host name"]}}'
       inputs:
         - BUCKET_NAME: '{{.inputs.bucket_name}}'
         - SANDBOX_ID: '{{sandboxId}}'
