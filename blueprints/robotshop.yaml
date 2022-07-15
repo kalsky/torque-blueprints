@@ -27,11 +27,11 @@ outputs:
   WebsiteUrl:
     value: 'robotshop-{{ sandboxid | downcase }}.testquali.click:8080'
   DB_Hostname:
-    value: '{{ .grains.mySqlDB.outputs.hostname }}'
+    value: '{{ .grains.["mySql DB"].outputs.["host name"] }}'
 
 grains:
 
-  mySqlDB:
+  mySql DB:
     kind: terraform
     spec:
       source:
@@ -49,7 +49,7 @@ grains:
         - vpc_id: vpc-02e3bca90b081cd0f
         - region: us-east-1
       outputs:
-        - hostname
+        - host name
         - connection_string
 
   s3Bucket:
@@ -63,10 +63,12 @@ grains:
         - region: eu-west-1
         - acl: public-read
         - name: 'robotshop-s3-{{ sandboxid | downcase }}'
+      outputs:
+        - s3_bucket_arn
 
   robotShopMicroservices:
     kind: helm
-    depends-on: mySqlDB, s3Bucket
+    depends-on: mySql DB, s3Bucket
     spec:
       source:
         path: https://github.com/QualiSystemsLab/Torque-Project-Pivot.git//robotShop
@@ -75,6 +77,6 @@ grains:
       inputs:
         - hostname: 'robotshop-{{ sandboxid | downcase }}'
         - version: '{{ .inputs.version }}'
-        - connectionString: '{{ .grains.mySqlDB.outputs.connection_string }}'
+        - connectionString: '{{ .grains.["mySql DB"].outputs.connection_string }}'
         - objectStore.s3BucketArn: '{{ .grains.s3Bucket.outputs.s3_bucket_arn }}'
         - redis.storageClassName: gp2
