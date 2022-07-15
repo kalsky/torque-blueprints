@@ -5,7 +5,7 @@ inputs:
   host:
     type: string
     display-style: normal
-    default: "shira-eks"
+    default: "eks-tko"
     description: "execution host"
   version:
     type: string
