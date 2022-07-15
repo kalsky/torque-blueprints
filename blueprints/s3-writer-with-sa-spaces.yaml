@@ -5,14 +5,14 @@ inputs:
   bucket_name:
     type: string
     display-style: normal
-    default: shiras-bucket
+    default: shiras-bucket    
   content:
     type: string
     default: this is a default content
     display-style: normal
   host name:
-    type: string
-    default: shira-eks
+    type: string    
+    default: eks-tko
     display-style: normal
 
 grains:
