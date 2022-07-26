@@ -8,7 +8,7 @@ inputs:
     default: shiras-bucket    
   content:
     type: string
-    default: this is a default content
+    default: {{.params.abc-def}}
     display-style: normal
   host name:
     type: string    
