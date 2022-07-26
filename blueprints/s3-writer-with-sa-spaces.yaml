@@ -5,10 +5,10 @@ inputs:
   bucket_name:
     type: string
     display-style: normal
-    default: '{{ .params.param1 }}'    
+    default: shiras-bucket    
   content:
     type: string
-    default: '{{ .params.abc-def }}'
+    default: this is a default content
     display-style: normal
   host name:
     type: string    
@@ -22,7 +22,7 @@ grains:
       source:
         path: github.com/shirabendor-quali/terraform/s3-write
       host:
-        name: '{{.inputs.["host name"]}}'
+        name: '{{.inputs.["host name"]}}{{ .params.param1 }}'
       inputs:
         - BUCKET_NAME: '{{.inputs.bucket_name}}'
         - SANDBOX_ID: '{{sandboxId}}'
