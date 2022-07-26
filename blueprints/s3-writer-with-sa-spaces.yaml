@@ -5,7 +5,7 @@ inputs:
   bucket_name:
     type: string
     display-style: normal
-    default: shiras-bucket    
+    default: '{{ .params.param1 }}'    
   content:
     type: string
     default: '{{ .params.abc-def }}'
