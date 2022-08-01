@@ -65,20 +65,6 @@ grains:
         - name: 'robotshop-s3-{{ sandboxid | downcase }}'
       outputs:
         - s3_bucket_arn
-  
-  s:
-    kind: terraform
-    spec: 
-      source:
-        path: github.com/johnathanvidu/prod-tests.git//terraform/s3
-      host:
-        name: '{{.inputs.host}}'
-      inputs:
-        - region: eu-west-1
-        - acl: public-read
-        - name: 'robotshop-s3-{{ sandboxid | downcase }}'
-      outputs:
-        - s3_bucket_arn
 
   robotShopMicroservices:
     kind: helm
