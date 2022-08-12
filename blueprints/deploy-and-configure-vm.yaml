@@ -40,7 +40,12 @@ grains:
           commands: 
             - name: set-mac-address
               command: >        
-                'curl -d "mac={{ .grains.deploy-from-template.outputs.eth_mac_address }}" -X POST {{ .params.IPAM_API_endpoint }}'
+                'curl -d "mac={{ .grains.deploy-from-template.outputs.eth_mac_address }}" -X POST {{ .params.IPAM_API_endpoint }}/create'
+        destroy:
+          commands: 
+            - name: set-mac-address
+              command: >        
+                'curl -d "mac={{ .grains.deploy-from-template.outputs.eth_mac_address }}" -X DELETE {{ .params.IPAM_API_endpoint }}'
   
   power-on-vm:
     kind: blueprint
