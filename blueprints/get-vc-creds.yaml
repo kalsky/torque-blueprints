@@ -1,0 +1,52 @@
+spec_version: 2
+description: "Gets VC credentials from Azure Vault"
+
+inputs:
+  vc_name:
+    type: string
+    default: "myvc"
+  host:
+    type: execution-host
+
+outputs:
+  vc_user:
+    kind: regular
+    value: "{{ .grains.get-user.outputs.vault_value }}"
+  vc_pass:
+    kind: regular
+    value: "{{ .grains.get-pass.outputs.vault_value }}"
+  
+
+grains:
+  get-user:
+    kind: blueprint
+    spec:
+      host: 
+        name: "{{ .inputs.host }}"
+      source:
+        path: blueprints\get-credentials.yaml
+      inputs:
+        - host: "{{ .inputs.host }}"  # might want to consider automatic variable that will get the host being used
+        - azure_token: "{{ .params.azure_vault_token }}"
+        - key: "{{ .inputs.vc_name }}_vc_user"
+        - resource_group: vc
+      outputs:
+        - vault_value
+  
+  get-pass:
+    kind: blueprint
+    spec:
+      host: 
+        name: "{{ .inputs.host }}"
+      source:
+        path: blueprints\get-credentials.yaml
+      inputs:
+        - host: "{{ .inputs.host }}"  # might want to consider automatic variable that will get the host being used
+        - azure_token: "{{ .params.azure_vault_token }}"
+        - key: "{{ .inputs.vc_name }}_vc_pass"
+        - resource_group: vc
+      outputs:
+        - vault_value
+        
+      
+        
