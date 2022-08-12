@@ -1,0 +1,22 @@
+spec_version: 2
+description: "Powers on a vm on vCenter and waits for ready signal"
+
+inputs:
+  vm_address:
+    type: string
+
+grains:
+  wait-for-ready:
+    kind: shell
+    spec:
+      host:
+        name: host1
+      files: 
+        - path: '~/wait_for_vm.py'
+          source: http://github.com/.../wait_for_vm.py
+      activities:
+        deploy:
+          commands: 
+            - name: get-utilization  # what can we do to fail this grain if utilization is high?
+              command: 'python ~/wait_for_vm.py {{ .inputs.vm_address }}'
+  

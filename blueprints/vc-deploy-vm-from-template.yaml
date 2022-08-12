@@ -1,0 +1,87 @@
+spec_version: 2
+description: "Deploys a VM on vCenter from a provided template name"
+
+inputs:
+  vcenter_name:
+    type: string
+  template_name:
+    type: string
+  network_name:
+    type: string
+  cpus:
+    type: string
+    allowed-values:
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+    default: 4
+  ram:
+    type: string
+    allowed-values:
+      - "4GB"
+      - "8GB"
+      - "16GB"
+      - "32GB"
+      - "64GB"
+    default: "16GB"
+  disk-size:
+    type: string
+    allowed-values:
+      - "50GB"
+      - "100GB"
+      - "200GB"
+      - "500GB"
+    default: "100GB"
+
+outputs:
+  vm_name:
+    value: "{{ .grains.deploy-from-template.outputs.vsphere_virtual_machine_name }}"
+  eth_mac_address:
+    value: "{{ .grains.deploy-from-template.outputs.eth_mac_address }}"
+
+grains:
+  generate-hostname:
+    kind: shell
+    spec:
+      activities:
+        deploy:
+          commands: 
+            - name: generate
+              command: openssl rand -hex 20 | head -c 8; echo
+
+  get-vc-cred:
+    kind: blueprint
+    spec:
+      host:
+        name: host1
+      source:
+        path: blueprints\get-vc-cred.yaml
+      inputs:
+        - vc_name: "{{ .inputs.vcenter_name }}"
+      outputs:
+        - vc_user
+        - vc_pass       
+
+  deploy-from-template:
+    kind: terraform
+    depends-on: generate-hostname, get-vc-cred
+    spec:
+      inputs:
+        - vc_user: '{{ .grains.get-vc-cred.outputs.vc_user }}'
+        - vc_pass: '{{ .grains.get-vc-cred.outputs.vc_pass }}'
+        - virtual_machine_template_name: '{{ .inputs.template_name }}'
+        - virtual_machine_name: "vm1_{{ .grains.generate-hostname.deploy.commands.generate.output }}"
+        - disk_size: '{{ .inputs.disk-size }}'
+        - ram: '{{ .inputs.ram }}'
+        - cpus: '{{ .inputs.cpus }}'
+        - network: '{{ .inputs.network_name }}'
+      outputs:
+        - vsphere_virtual_machine_name
+        - eth_mac_address
+      source:
+        path: https://github.com/QualiNext/torque-demo.git//terraform/vm-from-template
+      host:
+        cloud-account: private-cloud
+        compute-service: vcenter

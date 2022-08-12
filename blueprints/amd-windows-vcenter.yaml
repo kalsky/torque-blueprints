@@ -1,0 +1,51 @@
+spec_version: 2
+description: "Public: Deploy a Windows VM on vCenter"
+
+inputs:
+  windows_version:
+    type: string
+    allowed-values:
+      - Windows 2016
+      - Windows 2019
+      - Windows 11
+      - Windows 10
+    default: Windows 2019
+  network_name:
+    description: "Provide the Port Group to be used"
+    type: string
+  vcenter_name:
+    type: string
+    default: vc1
+
+outputs:
+  ip_address:
+    kind: regular
+    value: 0.0.0.0
+
+
+grains:
+  validate-vc-utilization:
+    kind: blueprint
+    spec:
+      host:
+        name: host1
+      source:
+        path: blueprints\check-vc-utilization.yaml # might need to move these to an asset repo
+      inputs:
+        - vcenter_name: "{{ .inputs.vcenter_name }}"
+    
+  deploy-and-configure:
+    kind: blueprint
+    spec:
+      host:
+        name: host1
+      source:
+        path: blueprints\deploy-and-configure-vm.yaml # might need to move these to an asset repo
+      inputs:
+        - vcenter_name: "{{ .inputs.vcenter_name }}"
+        - template_name: "{{ .inputs.windows_version }}" # will be nicer if we could have a map input type to convert Windows 2016 to win16template, etc
+        - network_name: "{{ .inputs.network_name }}"
+          
+  
+
+      

@@ -1,0 +1,40 @@
+spec_version: 2
+description: "Powers on a vm on vCenter and waits for ready signal"
+
+inputs:
+  vcenter_name:
+    type: string
+  vm_name:
+    type: string
+
+grains:
+  get-vc-cred:
+    kind: blueprint
+    spec:
+      host:
+        name: host1
+      source:
+        path: blueprints\get-vc-cred.yaml
+      inputs:
+        - vc_name: "{{ .inputs.vcenter_name }}"
+      outputs:
+        - vc_user
+        - vc_pass
+  
+  power-on-vm:
+    kind: terraform
+    depends-on: get-vc-cred
+    spec:
+      host:
+        name: host1
+      source:
+        path: https://github.com/QualiNext/torque-demo.git//terraform/power-on-vm
+      inputs:
+        - vc_user: '{{ .grains.get-vc-cred.outputs.vc_user }}'
+        - vc_pass: '{{ .grains.get-vc-cred.outputs.vc_pass }}'
+        - vm_name: '{{ .inputs.vm_name }}'
+      outputs:
+        - vm_address
+        
+  
+

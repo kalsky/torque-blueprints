@@ -1,0 +1,69 @@
+spec_version: 2
+description: "Deploys a VM on vCenter from a provided template name"
+
+inputs:
+  vcenter_name:
+    type: string
+  template_name:
+    type: string
+  network_name:
+    type: string
+
+outputs:
+  vm_name: 
+    value: abcd
+
+
+grains:
+  deploy-from-template: # how to select here or in the outer level if i want to deploy from template/link clone/etc. need to run the specific grain only if relevant
+    kind: blueprint
+    spec:
+      host: 
+        name: host1
+      source:
+        path: blueprints\vc-deploy-vm-from-template.yaml
+      inputs:
+        - vcenter_name: "{{ .inputs.vcenter_name }}"
+        - template_name: "{{ .inputs.template_name }}" # will be nicer if we could have a map input type to convert Windows 2016 to win16template, etc
+        - network_name: "{{ .inputs.network_name }}"
+        - cpus: 4
+      outputs:
+        - vm_name
+        - eth_mac_address
+  
+  configure-ipam:
+    kind: shell
+    depends-on: deploy-from-template
+    spec:
+      activities:
+        deploy:
+          commands: 
+            - name: set-mac-address
+              command: >        
+                'curl -d "mac={{ .grains.deploy-from-template.outputs.eth_mac_address }}" -X POST {{ .params.IPAM_API_endpoint }}'
+  
+  power-on-vm:
+    kind: blueprint
+    depends-on: configure-ipam
+    spec:
+      host: 
+        name: host1
+      source:
+        path: blueprints\power-on-vm.yaml
+      inputs:
+        - vcenter_name: "{{ .inputs.vcenter_name }}"
+        - vm_name: "{{ .grains.deploy-from-template.outputs.vm_name }}"        
+      outputs:
+        - vm_address
+
+  wait-for-vm:
+    kind: blueprint
+    depends-on: power-on-vm
+    spec:
+      host: 
+        name: host1
+      source:
+        path: blueprints\wait-for-vm.yaml
+      inputs:
+        - vm_address: "{{ .grains.power-on-vm.outputs.vm_address }}"
+  
