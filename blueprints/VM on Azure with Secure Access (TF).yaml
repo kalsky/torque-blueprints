@@ -1,0 +1,46 @@
+spec_version: 2
+description: "Checks the vCenter utilization and fails if there is not enough capacity"
+
+inputs:
+  vcenter_name:
+    type: string
+  valid_utilization:
+    type: string
+    default: 80
+
+outputs:
+  current_utilization:
+    kind: regular
+    value: "{{ .grains.get-vc-utilization.deploy.commands.get-utilization.output }}"
+
+grains:
+  get-vc-cred:
+    kind: blueprint
+    spec:
+      host:
+        name: host1
+      source:
+        path: blueprints\get-vc-cred.yaml
+      inputs:
+        - vc_name: "{{ .inputs.vcenter_name }}"
+      outputs:
+        - vc_user
+        - vc_pass
+      
+  get-vc-utilization:
+    kind: shell
+    depends-on: get-vc-cred
+    spec:
+      container: 
+        image: http://.../
+        host: some-host
+      files: 
+        - path: '~/get_vc_utilization.py'
+          source: http://github.com/.../get_vc_utilization.py
+      activities:
+        deploy:
+          commands: 
+            - name: get-utilization  # what can we do to fail this grain if utilization is high?
+              command: >        
+                'python ~/get_vc_utilization.py {{ .grains.get-vc-cred.outputs.vc_user }} {{ .grains.get-vc-cred.outputs.vc_pass }} {{ .inputs.valid_utilization }}'
+  
