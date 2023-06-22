@@ -19,3 +19,4 @@ Developers and network engineers access the Always On Sandbox directly using the
 | --- | --- | --- | --- | --- | --- | --- |
 | sbx-sdf-mgmt.werwe.com | admin | rertert! | 22 | 830 | 80, 443 | 443
 | fdsf-ter-sdf.sdfsd.com | admin | adfsd! | 22 | 830 | 80, 443 | 443
+| fdsf-ter-sdf.sdfsd.com | admin | adfsd! | 22 | 830 | 80, 443 | 443
