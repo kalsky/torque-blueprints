@@ -32,7 +32,8 @@ echo "$RDP_CONTENT" > $RDP_FILE
 BASE64_RDP=$(base64 "$RDP_FILE")
 
 # Output the base64 data
-export rdp_base64="<a href='data:application/x-rdp;base64,$BASE64_RDP'>Download RDP File</a>"
+export rdp_base64="<a href='data:application/x-rdp;base64,$BASE64_RDP' download='remote.rdp'>Download RDP File</a>"
+echo "$rdp_base64"
 
 # Clean up the RDP file
 rm "$RDP_FILE"
