@@ -15,10 +15,7 @@ inputs:
 
 outputs:
   rdp_file: 
-    value: '<a href="data:application/x-rdp;base64,{{ .grains.create-rdp-file.outputs.rdp_base64 }}">'
-    quick: true
-  rdp_file2: 
-    value: "data:application/x-rdp;base64,{{ .grains.create-rdp-file.outputs.rdp_base64 }}"
+    value: "{{ .grains.create-rdp-file.outputs.rdp_base64 }}"
     quick: true
 
 
@@ -26,6 +23,8 @@ grains:
   create-rdp-file:
     kind: shell
     spec:
+      agent:
+        name: vido-eks-portal-preview
       files:
         - source: torque-blueprints
           path: scripts/base64-rdp-file.sh
