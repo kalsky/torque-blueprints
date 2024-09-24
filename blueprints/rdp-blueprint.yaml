@@ -1,0 +1,39 @@
+spec_version: 2
+description: "Generates a download url of rdp file"
+
+inputs:
+  ip_address:
+    type: string
+    default: 10.10.10.10
+  username:
+    type: string
+    default: admin
+  password:
+    type: string
+    default: admin
+    sensitive: true
+
+outputs:
+  rdp_file: 
+    value: "{{ .grains.create-rdp-file.activities.deploy.commands.run_script.outputs.rdp_base64 }}"
+    quick: true
+    kind: link
+
+
+grains:
+  create-rdp-file:
+    kind: shell
+    spec:
+      agent:
+        name: vido-eks-portal-preview
+      files:
+        - source: torque-blueprints
+          path: scripts/base64-rdp-file.sh
+      activities:
+        deploy:
+          commands: 
+            - name: run_script
+              command:  'source base64-rdp-file.sh {{ .inputs.ip_address }} {{ .inputs.username }} {{ .inputs.password }}'
+              outputs:
+                - rdp_base64
+  
