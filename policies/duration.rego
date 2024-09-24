@@ -5,3 +5,6 @@ result = { "decision": "Denied", "reason": "Requested environment duration excee
    input.duration_minutes >= 180
 }
 
+result = { "decision": "Approved1", "reason": "Requested environment duration do not exceeds 180 minutes" } if {
+   input.duration_minutes < 180
+}
