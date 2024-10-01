@@ -1,0 +1,7 @@
+---
+- name: Print all environment variables
+  hosts: localhost
+  tasks:
+    - name: Display all environment variables
+      debug:
+        var: ansible_env
