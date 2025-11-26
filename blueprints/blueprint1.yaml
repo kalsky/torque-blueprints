@@ -5,7 +5,7 @@ instructions:
 metadata:
   self-service: true
   display-name: "My Custom Blueprint"
-  icon: "database2.svg"
+  icon: "database2"
 inputs:
   Bucket Name:
     description: "The name of the storage bucket that will be created"
