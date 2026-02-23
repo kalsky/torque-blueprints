@@ -6,6 +6,8 @@ metadata:
   self-service: true
   display-name: "My Custom Blueprint"
 inputs:
+  Agent:
+    type: agent
   Bucket Name:
     description: "The name of the storage bucket that will be created"
     default: "bucket"
@@ -14,7 +16,7 @@ grains:
     kind: shell
     spec:
       agent:
-        name: roman-docker-agent
+        name: {{ inputs.Agent }}
       activities:
         deploy:
           commands:
