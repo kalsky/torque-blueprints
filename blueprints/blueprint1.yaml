@@ -16,7 +16,7 @@ grains:
     kind: shell
     spec:
       agent:
-        name: {{ inputs.Agent }}
+        name: '{{ .inputs.Agent }}'
       activities:
         deploy:
           commands:
