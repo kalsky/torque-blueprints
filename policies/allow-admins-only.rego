@@ -1,4 +1,6 @@
 package torque.environment
+import future.keywords.if
+import future.keywords.in
 
 # data.required_role — the account role required to perform this operation (e.g. "admin")
 # Defaults to "admin" if not set by the space admin.
