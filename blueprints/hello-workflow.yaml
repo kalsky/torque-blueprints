@@ -1,0 +1,22 @@
+spec_version: 2
+description: Simple hello-world workflow that prints a message
+
+workflow:
+  scope: space
+  triggers:
+    - type: manual
+
+inputs:
+  agent:
+    type: agent
+
+grains:
+  say_hello:
+    kind: shell
+    spec:
+      agent:
+        name: '{{ .inputs.agent }}'
+      activities:
+        deploy:
+          commands:
+            - echo "Hello from a Torque workflow!"
